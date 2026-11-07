@@ -38,7 +38,7 @@ npm install
 npm test
 ```
 
-Dapat pumasa ang lahat ng 48 test. Ang mga test ang patunay na tama ang mga alert rule, halimbawa na hindi nag-a-alert sa eksaktong 85% CPU pero nag-a-alert sa 86%.
+Dapat pumasa ang lahat ng 62 test. Ang mga test ang patunay na tama ang mga alert rule, halimbawa na hindi nag-a-alert sa eksaktong 85% CPU pero nag-a-alert sa 86%.
 
 ## 5. Patakbuhin ang app
 
@@ -61,7 +61,7 @@ Buksan ang http://localhost:3000. Subukan ang **Inject a Fault**: pumili ng devi
    DEMO_MODE=true
    ```
 
-6. I-restart ang `npm run dev`. Dapat "Slack connected" na ang badge sa header.
+6. I-restart ang `npm run dev`. Dapat "Slack configured" na ang badge sa header. Magiging "Slack sent OK" ito kapag may unang alert na naipadala. Kung "Slack error", mali ang URL.
 
 > **Paalala:** Secret ang webhook URL. Huwag itong i-commit o i-post. Naka-ignore na ang `.env.local` sa `.gitignore`.
 

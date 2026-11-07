@@ -49,4 +49,20 @@ describe('parsePollState', () => {
     expect(() => parsePollState({ ...INITIAL, history: [[{ hostname: 'fw-01' }]] })).toThrow(ValidationError)
     expect(() => parsePollState({ ...INITIAL, alerts: [{ key: 1 }] })).toThrow(ValidationError)
   })
+
+  it('rejects a tick with more samples than devices', () => {
+    const tick = [...simulate(1, []), ...simulate(1, [])]
+    expect(() => parsePollState({ ...INITIAL, tick: 1, history: [tick] })).toThrow(ValidationError)
+  })
+
+  it('rejects a sample with an oversized interface list', () => {
+    const [s, ...rest] = simulate(1, [])
+    const big = { ...s, interfaces: Array.from({ length: 50 }, (_, i) => ({ name: `x${i}`, admin: 'up', oper: 'up' })) }
+    expect(() => parsePollState({ ...INITIAL, tick: 1, history: [[big, ...rest]] })).toThrow(ValidationError)
+  })
+
+  it('accepts an optional string signature', () => {
+    expect(parsePollState({ ...INITIAL, sig: 'abc' }).sig).toBe('abc')
+    expect(() => parsePollState({ ...INITIAL, sig: 5 })).toThrow(ValidationError)
+  })
 })

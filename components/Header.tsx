@@ -2,8 +2,8 @@ import type { Alert, DeviceSample, SlackStatus } from '@/lib/types'
 import styles from './Header.module.css'
 
 const SLACK_LABEL: Record<SlackStatus, string> = {
-  sent: 'Slack connected',
-  idle: 'Slack connected',
+  sent: 'Slack sent OK',
+  idle: 'Slack configured',
   disabled: 'Slack off',
   error: 'Slack error',
 }

@@ -12,14 +12,17 @@ export interface Config {
 /** All alert thresholds in one place, so they are easy to tune and explain. */
 export function getConfig(env: Record<string, string | undefined> = process.env): Config {
   const demoMode = env.DEMO_MODE !== 'false'
+  const pollIntervalS = 5
+  const bgpWindowS = demoMode ? 60 : 300
   return {
-    pollIntervalS: 5,
-    historyMax: 60,
+    pollIntervalS,
+    // Keep at least one full BGP window (+1 sample to count transitions).
+    historyMax: Math.max(60, bgpWindowS / pollIntervalS + 1),
     cpuThreshold: 85,
     cpuCritical: 95,
     cpuConsecutive: 3,
     bgpTransitions: 3,
-    bgpWindowS: demoMode ? 60 : 300,
+    bgpWindowS,
     demoMode,
   }
 }

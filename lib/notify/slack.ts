@@ -1,12 +1,16 @@
 import type { AlertEvent, Notifier, SlackStatus } from '../types'
 
 const BADGE = { critical: '🔴 CRITICAL', warning: '🟠 WARNING' } as const
+const MAX_POSTS = 5
+
+/** Slack treats < > & as control characters (mentions, links). */
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
 export function formatSlackMessage(e: AlertEvent): { text: string } {
   const a = e.alert
   const badge = e.kind === 'resolved' ? '✅ RESOLVED' : BADGE[a.severity]
   const tick = e.kind === 'resolved' ? a.resolvedAt : a.openedAt
-  return { text: `${badge} *${a.rule}* on \`${a.device}\` (${a.target}) — ${a.value} · tick ${tick}` }
+  return { text: `${badge} *${a.rule}* on \`${esc(a.device)}\` (${esc(a.target)}) — ${esc(a.value)} · tick ${tick}` }
 }
 
 async function post(url: string, body: { text: string }, fetchImpl: typeof fetch, timeoutMs: number): Promise<boolean> {
@@ -39,8 +43,13 @@ export function createSlackNotifier(url: string | undefined, fetchImpl: typeof f
     async send(events: AlertEvent[]): Promise<SlackStatus> {
       if (!url) return 'disabled'
       if (events.length === 0) return 'idle'
-      const results = await Promise.all(events.map((e) => post(url, formatSlackMessage(e), fetchImpl, timeoutMs)))
-      return results.every(Boolean) ? 'sent' : 'error'
+      // One at a time and capped, to stay within Slack's webhook rate limit.
+      const messages = events.slice(0, MAX_POSTS).map(formatSlackMessage)
+      const extra = events.length - MAX_POSTS
+      if (extra > 0) messages.push({ text: `…and ${extra} more alert changes. See the dashboard.` })
+      let ok = true
+      for (const m of messages) ok = (await post(url, m, fetchImpl, timeoutMs)) && ok
+      return ok ? 'sent' : 'error'
     },
   }
 }

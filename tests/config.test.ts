@@ -10,6 +10,6 @@ describe('getConfig', () => {
   })
 
   it('uses a 300s BGP window when DEMO_MODE=false', () => {
-    expect(getConfig({ DEMO_MODE: 'false' })).toMatchObject({ bgpWindowS: 300, demoMode: false })
+    expect(getConfig({ DEMO_MODE: 'false' })).toMatchObject({ bgpWindowS: 300, demoMode: false, historyMax: 61 })
   })
 })

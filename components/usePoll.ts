@@ -28,6 +28,7 @@ export function usePoll() {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(stateRef.current),
+        signal: AbortSignal.timeout(10_000), // a hung request must not stall polling
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error ?? `HTTP ${res.status}`)

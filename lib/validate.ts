@@ -1,11 +1,12 @@
 import { getConfig } from './config'
-import { findDevice } from './devices'
+import { DEVICES, findDevice } from './devices'
 import type { Alert, DeviceSample, Fault, PollState } from './types'
 
 export class ValidationError extends Error {}
 
 const MAX_FAULTS = 20
 const MAX_ALERTS = 200
+const MAX_LINKS = 16
 const BGP_STATES = ['Established', 'Idle', 'Active']
 const LINK = ['up', 'down']
 const RULES = ['high-cpu', 'interface-down', 'bgp-flap']
@@ -41,6 +42,7 @@ function parseFault(v: unknown): Fault {
 function parseSample(v: unknown): DeviceSample {
   if (!isObj(v) || !isStr(v.hostname) || !findDevice(v.hostname) || !isCount(v.tick) || !isNum(v.cpu)) fail('bad sample')
   if (!Array.isArray(v.interfaces) || !Array.isArray(v.bgp)) fail('bad sample')
+  if (v.interfaces.length > MAX_LINKS || v.bgp.length > MAX_LINKS) fail('too many interfaces or peers in sample')
   const interfaces = v.interfaces.map((i) => {
     if (!isObj(i) || !isStr(i.name) || !LINK.includes(i.admin as string) || !LINK.includes(i.oper as string)) fail('bad interface')
     return { name: i.name, admin: i.admin, oper: i.oper } as DeviceSample['interfaces'][number]
@@ -65,7 +67,8 @@ function parseAlert(v: unknown): Alert {
 export function parsePollState(body: unknown): PollState {
   if (body === undefined || body === null) body = {}
   if (!isObj(body)) fail('body must be an object')
-  const { tick = 0, faults = [], history = [], alerts = [] } = body
+  const { tick = 0, faults = [], history = [], alerts = [], sig } = body
+  if (sig !== undefined && !isStr(sig)) fail('sig must be a string')
   if (!isCount(tick)) fail('tick must be a non-negative integer')
   if (!Array.isArray(faults) || !Array.isArray(history) || !Array.isArray(alerts)) fail('faults, history and alerts must be arrays')
   if (faults.length > MAX_FAULTS) fail(`at most ${MAX_FAULTS} faults`)
@@ -78,7 +81,12 @@ export function parsePollState(body: unknown): PollState {
   return {
     tick,
     faults: [...unique.values()],
-    history: trimmed.map((t) => (Array.isArray(t) ? t.map(parseSample) : fail('history entries must be arrays'))),
+    history: trimmed.map((t) => {
+      if (!Array.isArray(t)) fail('history entries must be arrays')
+      if (t.length > DEVICES.length) fail('too many samples in a history entry')
+      return t.map(parseSample)
+    }),
     alerts: alerts.map(parseAlert),
+    ...(sig !== undefined && { sig }),
   }
 }

@@ -6,7 +6,7 @@
 
 - [ ] Open the deployed URL (or `npm run dev`) and confirm the fleet shows **6/6 healthy**.
 - [ ] Open the Slack channel next to the browser.
-- [ ] Check that the Slack badge says **"Slack connected"**.
+- [ ] Check that the Slack badge says **"Slack configured"**. Do one test run first (inject and clear a fault) and confirm the badge turns **"Slack sent OK"**. If it says "Slack error", the webhook URL is wrong.
 - [ ] Clear all faults.
 - [ ] Have `lib/rules.ts` and `lib/config.ts` ready in VS Code.
 
@@ -32,13 +32,19 @@ After about 15 seconds the card turns red, the alert appears, and the Slack mess
 Show `lib/config.ts` and `bgpFlap` in `lib/rules.ts`.
 > "Each rule is a small pure function with its own unit tests at the edges: 85% CPU doesn't alert, 86% does; two transitions don't count as a flap, three do. The CPU rule needs three consecutive samples so a single spike doesn't page anyone at 3am."
 
-**2:45 · Resolve (30s)**
+**2:45 · Clear the fault, then keep talking (15s)**
 Click **Clear All Faults**.
-> "When the condition clears, the alert resolves and Slack gets a ✅ RESOLVED message, so the on-call engineer knows they can stand down."
+> "I've fixed the session. The flap alert won't resolve instantly: it waits until the flaps age out of the 60-second window, so a link that's still unstable doesn't get closed too early. While that drains, here's how it's built."
 
-**3:15 · Architecture (60s)**
+Resolving takes about 45–60 seconds. Don't wait in silence; go straight to the architecture.
+
+**3:00 · Architecture (60s)**
 Show the README diagram.
-> "It's one Next.js app on Vercel. The logic is plain TypeScript (simulator, rules, alert lifecycle, notifier), so each piece is tested on its own. The API function is stateless, so the browser carries the state and the server validates it on every request. If Slack is down or slow, a 3-second timeout means monitoring keeps running."
+> "It's one Next.js app on Vercel. The logic is plain TypeScript (simulator, rules, alert lifecycle, notifier), so each piece is tested on its own. The API function is stateless, so the browser carries the state, and the server validates and signs it on every request, so a crafted request can't make it post fake alerts to Slack. If Slack is down or slow, a 3-second timeout means monitoring keeps running."
+
+**4:00 · Point at the resolve (15s)**
+By now the card is green again and Slack shows ✅ RESOLVED.
+> "There's the resolved message, so the on-call engineer knows they can stand down."
 
 **4:15 · Limits and next steps (45s)**
 > "Two things I'd do next. First, swap the simulator for a real collector (SNMP or vendor APIs) that outputs the same data shape, so the rules don't change. Second, move state into a store and run checks on a schedule instead of on dashboard polls, so it monitors even when nobody has the page open."
@@ -89,4 +95,4 @@ Ways to connect this project, phrased as questions or observations rather than c
 > "One codebase for the UI and the API, no servers to run, and a preview URL for every change. For a forward-deployed setting, fast iteration with a customer matters more than infrastructure."
 
 **"How did you test it?"**
-> "48 unit tests covering threshold edges, the alert lifecycle, input validation and a Slack timeout. Then I checked each fault type end to end in the browser."
+> "62 unit tests covering threshold edges, the alert lifecycle, input validation, state signing, and Slack timeouts and limits. Then I checked each fault type end to end in the browser."

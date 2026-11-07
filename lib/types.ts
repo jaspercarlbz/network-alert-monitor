@@ -56,6 +56,8 @@ export interface PollState {
   faults: Fault[]
   history: DeviceSample[][]
   alerts: Alert[]
+  /** HMAC over tick, history and alerts, set by the server. */
+  sig?: string
 }
 
 export type SlackStatus = 'sent' | 'idle' | 'disabled' | 'error'

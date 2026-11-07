@@ -14,12 +14,13 @@ npm test        # unit tests (Vitest)
 npm run dev     # http://localhost:3000
 ```
 
-To send alerts to Slack, copy `.env.example` to `.env.local` and set `SLACK_WEBHOOK_URL`. Without it, alerts still show on the dashboard and the header reads "Slack off".
+To send alerts to Slack, copy `.env.example` to `.env.local` and set `SLACK_WEBHOOK_URL`. Without it, alerts still show on the dashboard and the header reads "Slack off". With a URL set, it reads "Slack configured" until the first alert is sent, then "Slack sent OK" or "Slack error".
 
 | Variable | Default | Purpose |
 |---|---|---|
 | `SLACK_WEBHOOK_URL` | empty | Slack Incoming Webhook URL. Treat it as a secret. |
 | `DEMO_MODE` | `true` | Shortens the BGP flap window to 60s. Set to `false` for 300s. |
+| `STATE_SECRET` | the webhook URL | Optional. Signs the state the browser carries between polls. |
 
 ## Alert rules
 
@@ -47,7 +48,7 @@ Browser (dashboard)
 { devices, alerts, events, slack }
 ```
 
-Vercel Functions are stateless, so the browser holds the monitoring state and sends it with each poll. The server validates that state on every request ([`lib/validate.ts`](lib/validate.ts)).
+Vercel Functions are stateless, so the browser holds the monitoring state and sends it with each poll. The server validates that state on every request ([`lib/validate.ts`](lib/validate.ts)) and signs it with an HMAC ([`lib/sign.ts`](lib/sign.ts)). State the server did not sign starts over from a clean slate, so a crafted request cannot make the app post alerts it never raised. Slack posts are escaped, sent one at a time, and capped at 5 per poll.
 
 ```
 lib/           pure TypeScript logic (unit-tested)

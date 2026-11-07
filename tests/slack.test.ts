@@ -66,4 +66,30 @@ describe('formatSlackMessage', () => {
   it('marks resolved events', () => {
     expect(formatSlackMessage(RESOLVED).text).toBe('✅ RESOLVED *bgp-flap* on `core-rtr-01` (10.0.0.2) — 3 transitions / 60s · tick 9')
   })
+
+  it('escapes Slack control characters in alert fields', () => {
+    const evil = { kind: 'new' as const, alert: { ...alert, value: '<!channel> <https://x|y> & co' } }
+    expect(formatSlackMessage(evil).text).toContain('&lt;!channel&gt; &lt;https://x|y&gt; &amp; co')
+  })
+})
+
+describe('createSlackNotifier limits', () => {
+  it('posts at most 5 events plus one summary per poll, one at a time', async () => {
+    let inFlight = 0
+    let maxInFlight = 0
+    const bodies: string[] = []
+    const f = vi.fn(async (_u: string, init?: RequestInit) => {
+      inFlight++
+      maxInFlight = Math.max(maxInFlight, inFlight)
+      await new Promise((r) => setTimeout(r, 5))
+      bodies.push(JSON.parse(init!.body as string).text)
+      inFlight--
+      return new Response('ok', { status: 200 })
+    })
+    const events = Array.from({ length: 8 }, () => NEW)
+    expect(await createSlackNotifier('https://hooks.example/x', f as unknown as typeof fetch).send(events)).toBe('sent')
+    expect(f).toHaveBeenCalledTimes(6)
+    expect(maxInFlight).toBe(1)
+    expect(bodies[5]).toBe('…and 3 more alert changes. See the dashboard.')
+  })
 })
