@@ -1,0 +1,22 @@
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: grid; gap: 12px; }
+.heading { font-size: 1rem; }
+.hint { margin: 0; font-size: 0.85rem; color: var(--muted); }
+.fields { display: grid; gap: 8px; }
+.field { display: grid; gap: 4px; font-size: 0.8rem; color: var(--muted); }
+.field select {
+  padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface-2); font-size: 0.9rem; color: var(--text); min-height: 40px;
+}
+.actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.btn {
+  min-height: 40px; padding: 8px 6px; border-radius: 8px; border: 1px solid var(--crit);
+  background: var(--crit-bg); color: var(--crit); font-weight: 600; font-size: 0.85rem; cursor: pointer;
+}
+.btn:hover:not(:disabled) { background: var(--crit); color: #fff; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.active { display: grid; gap: 6px; border-top: 1px solid var(--border); padding-top: 10px; }
+.activeHead { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 600; }
+.faultList { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 0.85rem; }
+.faultList li { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+.link { background: none; border: none; color: var(--accent); cursor: pointer; padding: 4px; font-size: 0.85rem; }
+.link:disabled { color: var(--muted); cursor: not-allowed; }

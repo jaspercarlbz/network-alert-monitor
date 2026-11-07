@@ -21,6 +21,7 @@ describe('runPoll', () => {
     expect(r.devices).toHaveLength(6)
     expect(r.events).toEqual([])
     expect(r.slack).toBe('idle')
+    expect(r.demoMode).toBe(true)
   })
 
   it('opens a bgp-flap alert within 4 polls and notifies once', async () => {

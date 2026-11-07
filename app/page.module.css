@@ -1,0 +1,27 @@
+.main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+  display: grid;
+  gap: 20px;
+}
+
+.layout {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 960px) {
+  .layout { grid-template-columns: minmax(0, 1fr) 380px; align-items: start; }
+}
+
+.side { display: grid; gap: 20px; }
+
+.banner {
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: var(--crit-bg);
+  color: var(--crit);
+  border: 1px solid var(--crit);
+}

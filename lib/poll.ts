@@ -12,5 +12,5 @@ export async function runPoll(state: PollState, notifier: Notifier, cfg: Config)
   const hits = evaluateRules(history, cfg)
   const { alerts, events } = reconcile(state.alerts, hits, tick)
   const slack = await notifier.send(events)
-  return { state: { tick, faults: state.faults, history, alerts }, devices, events, slack }
+  return { state: { tick, faults: state.faults, history, alerts }, devices, events, slack, demoMode: cfg.demoMode }
 }

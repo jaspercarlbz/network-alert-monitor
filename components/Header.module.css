@@ -1,0 +1,22 @@
+.header { display: grid; gap: 16px; }
+.titleRow { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: flex-start; }
+.title { font-size: 1.5rem; letter-spacing: -0.01em; }
+.subtitle { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge {
+  font-size: 0.8rem; padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--surface); color: var(--muted);
+}
+.slack_sent, .slack_idle { color: var(--ok); border-color: var(--ok); }
+.slack_error { color: var(--crit); border-color: var(--crit); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 0; }
+.stat {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 12px 14px;
+}
+.stat dt { font-size: 0.8rem; color: var(--muted); }
+.stat dd { margin: 2px 0 0; font-size: 1.5rem; font-weight: 600; }
+.crit { border-color: var(--crit); background: var(--crit-bg); }
+.crit dd { color: var(--crit); }
+.warn { border-color: var(--warn); background: var(--warn-bg); }
+.warn dd { color: var(--warn); }

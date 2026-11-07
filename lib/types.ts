@@ -65,6 +65,7 @@ export interface PollResponse {
   devices: DeviceSample[]
   events: AlertEvent[]
   slack: SlackStatus
+  demoMode: boolean
 }
 
 export interface Notifier {
