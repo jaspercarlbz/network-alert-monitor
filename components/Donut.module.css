@@ -1,0 +1,18 @@
+.figure { margin: 0; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.chart { position: relative; flex: none; }
+.chart svg { display: block; overflow: visible; }
+.arc { cursor: pointer; transition: stroke-width 0.15s ease; }
+.center {
+  position: absolute; inset: 0; display: grid; place-content: center; text-align: center;
+  pointer-events: none;
+}
+.value { font-size: 1.6rem; font-weight: 700; line-height: 1; }
+.label { font-size: 0.72rem; color: var(--muted); margin-top: 4px; max-width: 80px; }
+.caption { display: grid; gap: 8px; min-width: 140px; flex: 1; }
+.title { font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 0.88rem; }
+.legend li { display: grid; grid-template-columns: 12px 1fr auto; gap: 8px; align-items: center; cursor: default; transition: opacity 0.15s; }
+.dim { opacity: 0.45; }
+.swatch { width: 12px; height: 12px; border-radius: 4px; }
+.count { font-weight: 600; }
+@media (prefers-reduced-motion: reduce) { .arc, .legend li { transition: none; } }

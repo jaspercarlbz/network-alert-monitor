@@ -18,8 +18,8 @@
 > "In my current role I monitor routers, switches and firewalls. A lot of the work is noticing the same few problems early: CPU running hot, an interface dropping, a BGP session flapping. I built this to show how I'd turn that daily workflow into an automated tool that a team can deploy in an afternoon."
 
 **0:30 · Healthy fleet (30s)**
-Point at the device grid.
-> "Six simulated devices across HQ and two branches, from mixed vendors. Every five seconds the app polls them and runs three rules."
+Point at the fleet health donut, then the device grid.
+> "Six simulated devices across HQ and two branches, from mixed vendors, color-coded by role. The donut is the at-a-glance view a NOC wants: how many devices are healthy, warning or critical. Each card has a CPU ring with a tick at the 85% alert threshold. Every five seconds the app polls them and runs three rules."
 
 **1:00 · Inject a BGP flap (60s)**
 Select `core-rtr-01` → peer `10.0.0.2` → **Flap BGP**.
@@ -95,4 +95,4 @@ Ways to connect this project, phrased as questions or observations rather than c
 > "One codebase for the UI and the API, no servers to run, and a preview URL for every change. For a forward-deployed setting, fast iteration with a customer matters more than infrastructure."
 
 **"How did you test it?"**
-> "62 unit tests covering threshold edges, the alert lifecycle, input validation, state signing, and Slack timeouts and limits. Then I checked each fault type end to end in the browser."
+> "68 unit tests covering threshold edges, the alert lifecycle, input validation, state signing, Slack timeouts and limits, and the chart math. Then I checked each fault type end to end in the browser."

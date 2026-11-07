@@ -1,22 +1,39 @@
 .header { display: grid; gap: 16px; }
 .titleRow { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: flex-start; }
-.title { font-size: 1.5rem; letter-spacing: -0.01em; }
+.title {
+  font-size: 1.75rem; letter-spacing: -0.02em;
+  background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
 .subtitle { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; }
 .badges { display: flex; flex-wrap: wrap; gap: 8px; }
 .badge {
   font-size: 0.8rem; padding: 4px 10px; border-radius: 999px;
   border: 1px solid var(--border); background: var(--surface); color: var(--muted);
 }
+.demo { border-color: var(--role-router); color: var(--text); }
 .slack_sent, .slack_idle { color: var(--ok); border-color: var(--ok); }
 .slack_error { color: var(--crit); border-color: var(--crit); }
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 0; }
-.stat {
+
+.overview { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 760px) { .overview { grid-template-columns: minmax(300px, 1fr) minmax(0, 1.4fr); } }
+
+.healthCard {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 12px 14px;
+  padding: 16px; position: relative; overflow: hidden;
+}
+.healthCard::before {
+  content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; background: var(--brand-gradient);
+}
+
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; }
+.stat {
+  background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent-c, var(--border));
+  border-radius: var(--radius); padding: 12px 14px; display: grid; align-content: center;
 }
 .stat dt { font-size: 0.8rem; color: var(--muted); }
-.stat dd { margin: 2px 0 0; font-size: 1.5rem; font-weight: 600; }
-.crit { border-color: var(--crit); background: var(--crit-bg); }
-.crit dd { color: var(--crit); }
-.warn { border-color: var(--warn); background: var(--warn-bg); }
-.warn dd { color: var(--warn); }
+.stat dd { margin: 2px 0 0; font-size: 1.6rem; font-weight: 700; }
+.statCrit { --accent-c: var(--status-critical); }
+.statWarn { --accent-c: var(--status-warning); }
+.statDevices { --accent-c: var(--role-switch); }
+.statTime { --accent-c: var(--role-router); }
+.time { font-size: 1.1rem !important; }

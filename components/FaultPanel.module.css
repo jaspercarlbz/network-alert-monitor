@@ -1,4 +1,5 @@
-.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: grid; gap: 12px; }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: grid; gap: 12px; position: relative; overflow: hidden; }
+.panel::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, var(--status-warning), var(--status-critical)); }
 .heading { font-size: 1rem; }
 .hint { margin: 0; font-size: 0.85rem; color: var(--muted); }
 .fields { display: grid; gap: 8px; }

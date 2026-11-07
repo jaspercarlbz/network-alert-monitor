@@ -1,4 +1,6 @@
+import { fleetHealth } from '@/lib/viz'
 import type { Alert, DeviceSample, SlackStatus } from '@/lib/types'
+import { Donut } from './Donut'
 import styles from './Header.module.css'
 
 const SLACK_LABEL: Record<SlackStatus, string> = {
@@ -17,9 +19,8 @@ interface Props {
 }
 
 export function Header({ devices, alerts, slack, demoMode, lastUpdated }: Props) {
+  const health = fleetHealth(devices, alerts)
   const open = alerts.filter((a) => a.status === 'open')
-  const alerting = new Set(open.map((a) => a.device))
-  const healthy = devices.filter((d) => !alerting.has(d.hostname)).length
   const critical = open.filter((a) => a.severity === 'critical').length
   const warning = open.length - critical
 
@@ -31,29 +32,44 @@ export function Header({ devices, alerts, slack, demoMode, lastUpdated }: Props)
           <p className={styles.subtitle}>Simulated routers, switches and firewalls · polled every 5s</p>
         </div>
         <div className={styles.badges}>
-          {demoMode ? <span className={styles.badge}>Demo mode · 60s BGP window</span> : null}
+          {demoMode ? <span className={`${styles.badge} ${styles.demo}`}>Demo mode · 60s BGP window</span> : null}
           {slack ? <span className={`${styles.badge} ${styles[`slack_${slack}`]}`}>{SLACK_LABEL[slack]}</span> : null}
         </div>
       </div>
 
-      <dl className={styles.stats}>
-        <div className={styles.stat}>
-          <dt>Healthy devices</dt>
-          <dd className="mono">{healthy}/{devices.length}</dd>
-        </div>
-        <div className={`${styles.stat} ${critical ? styles.crit : ''}`}>
-          <dt>Critical</dt>
-          <dd className="mono">{critical}</dd>
-        </div>
-        <div className={`${styles.stat} ${warning ? styles.warn : ''}`}>
-          <dt>Warning</dt>
-          <dd className="mono">{warning}</dd>
-        </div>
-        <div className={styles.stat}>
-          <dt>Last updated</dt>
-          <dd className="mono" aria-live="polite">{lastUpdated ? lastUpdated.toLocaleTimeString() : 'Connecting…'}</dd>
-        </div>
-      </dl>
+      <div className={styles.overview}>
+        <section className={styles.healthCard} aria-label="Fleet health">
+          <Donut
+            title="Fleet health"
+            centerValue={`${health.ok}/${devices.length || 0}`}
+            centerLabel="healthy"
+            items={[
+              { key: 'ok', label: 'Healthy', value: health.ok, color: 'var(--status-good)' },
+              { key: 'warning', label: 'Warning', value: health.warning, color: 'var(--status-warning)' },
+              { key: 'critical', label: 'Critical', value: health.critical, color: 'var(--status-critical)' },
+            ]}
+          />
+        </section>
+
+        <dl className={styles.stats}>
+          <div className={`${styles.stat} ${styles.statCrit}`}>
+            <dt>Critical alerts</dt>
+            <dd className="mono">{critical}</dd>
+          </div>
+          <div className={`${styles.stat} ${styles.statWarn}`}>
+            <dt>Warning alerts</dt>
+            <dd className="mono">{warning}</dd>
+          </div>
+          <div className={`${styles.stat} ${styles.statDevices}`}>
+            <dt>Devices polled</dt>
+            <dd className="mono">{devices.length}</dd>
+          </div>
+          <div className={`${styles.stat} ${styles.statTime}`}>
+            <dt>Last updated</dt>
+            <dd className={`mono ${styles.time}`}>{lastUpdated ? lastUpdated.toLocaleTimeString() : 'Connecting…'}</dd>
+          </div>
+        </dl>
+      </div>
     </header>
   )
 }

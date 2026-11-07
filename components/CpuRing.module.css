@@ -1,0 +1,8 @@
+.ring { position: relative; width: 64px; height: 64px; flex: none; }
+.ring svg { display: block; }
+.arc { transition: stroke-dasharray 0.4s ease, stroke 0.3s ease; }
+.value {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-size: 0.85rem; font-weight: 700;
+}
+@media (prefers-reduced-motion: reduce) { .arc { transition: none; } }

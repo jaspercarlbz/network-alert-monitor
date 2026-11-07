@@ -38,7 +38,7 @@ npm install
 npm test
 ```
 
-Dapat pumasa ang lahat ng 62 test. Ang mga test ang patunay na tama ang mga alert rule, halimbawa na hindi nag-a-alert sa eksaktong 85% CPU pero nag-a-alert sa 86%.
+Dapat pumasa ang lahat ng 68 test. Ang mga test ang patunay na tama ang mga alert rule, halimbawa na hindi nag-a-alert sa eksaktong 85% CPU pero nag-a-alert sa 86%.
 
 ## 5. Patakbuhin ang app
 

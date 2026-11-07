@@ -1,5 +1,6 @@
 import { DEVICES } from '@/lib/devices'
 import type { Alert, DeviceSample, Severity } from '@/lib/types'
+import { CpuRing } from './CpuRing'
 import styles from './DeviceGrid.module.css'
 
 type Health = 'ok' | Severity
@@ -22,21 +23,24 @@ export function DeviceGrid({ devices, alerts }: { devices: DeviceSample[]; alert
           const s = samples.get(device.hostname)
           const health = worst(open.filter((a) => a.device === device.hostname))
           return (
-            <li key={device.hostname} className={`${styles.card} ${styles[health]}`}>
+            <li key={device.hostname} className={`${styles.card} ${styles[health]} ${styles[`role_${device.role}`]}`}>
               <div className={styles.cardHead}>
                 <div>
                   <h3 className={`${styles.host} mono`} translate="no">{device.hostname}</h3>
-                  <p className={styles.meta}>{device.role} · {device.vendor} · {device.site}</p>
+                  <p className={styles.meta}>
+                    <span className={styles.roleChip}>{device.role}</span>
+                    {device.vendor} · {device.site}
+                  </p>
                 </div>
                 <span className={`${styles.status} ${styles[`status_${health}`]}`}>{HEALTH_LABEL[health]}</span>
               </div>
 
               <div className={styles.cpu}>
-                <span className={styles.label}>CPU</span>
-                <div className={styles.bar} role="meter" aria-label={`${device.hostname} CPU`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={s?.cpu ?? 0}>
-                  <div className={`${styles.fill} ${(s?.cpu ?? 0) > 85 ? styles.fillHot : ''}`} style={{ transform: `scaleX(${(s?.cpu ?? 0) / 100})` }} />
+                <CpuRing cpu={s ? s.cpu : null} hostname={device.hostname} />
+                <div className={styles.cpuText}>
+                  <span className={styles.label}>CPU</span>
+                  <span className={styles.cpuHint}>{s && s.cpu > 85 ? 'Above 85% alert threshold' : 'Alert threshold 85%'}</span>
                 </div>
-                <span className="mono">{s ? `${s.cpu}%` : '—'}</span>
               </div>
 
               <div className={styles.section}>
