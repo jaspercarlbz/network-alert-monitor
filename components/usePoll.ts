@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { addToMailbox, type AlertEmail } from '@/lib/email'
 import type { Fault, PollResponse, PollState } from '@/lib/types'
 
 const INTERVAL_MS = 5000
@@ -16,6 +17,7 @@ export function usePoll() {
   const [error, setError] = useState<string | null>(null)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [faults, setFaults] = useState<Fault[]>([])
+  const [mail, setMail] = useState<AlertEmail[]>([])
 
   const stateRef = useRef<PollState>(INITIAL)
   const inFlight = useRef(false)
@@ -36,6 +38,7 @@ export function usePoll() {
       // Keep faults changed while this request was in flight.
       stateRef.current = { ...next.state, faults: stateRef.current.faults }
       setData(next)
+      if (next.events.length > 0) setMail((m) => addToMailbox(m, next.events, new Date()))
       setError(null)
       setLastUpdated(new Date())
     } catch (err) {
@@ -78,5 +81,11 @@ export function usePoll() {
 
   const clearFaults = useCallback(() => setFaultList([]), [setFaultList])
 
-  return { data, error, lastUpdated, faults, addFault, removeFault, clearFaults }
+  const markRead = useCallback((id: string) => {
+    setMail((m) => m.map((x) => (x.id === id && !x.read ? { ...x, read: true } : x)))
+  }, [])
+
+  const markAllRead = useCallback(() => setMail((m) => m.map((x) => (x.read ? x : { ...x, read: true }))), [])
+
+  return { data, error, lastUpdated, faults, addFault, removeFault, clearFaults, mail, markRead, markAllRead }
 }

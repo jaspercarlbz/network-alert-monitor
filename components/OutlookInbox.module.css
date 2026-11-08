@@ -1,0 +1,50 @@
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; padding: 10px 14px; background: linear-gradient(90deg, #0f6cbd, #2a78d6); color: #fff; }
+.barTitle { display: flex; align-items: center; gap: 10px; min-width: 0; flex-wrap: wrap; }
+.mailIcon { font-size: 1.1rem; }
+.heading { font-size: 1rem; margin: 0; }
+.address { font-size: 0.85rem; opacity: 0.9; overflow-wrap: anywhere; }
+.barRight { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.preview { font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.18); }
+.markAll { font: inherit; font-size: 0.8rem; color: #0f3d6e; background: #fff; border: 0; border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+.markAll:disabled { opacity: 0.6; cursor: default; }
+.markAll:focus-visible, .row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.body { display: grid; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 860px) { .body { grid-template-columns: 380px minmax(0, 1fr); min-height: 360px; } }
+
+.listPane { border-bottom: 1px solid var(--border); background: var(--surface-2); min-width: 0; }
+@media (min-width: 860px) { .listPane { border-bottom: 0; border-right: 1px solid var(--border); } }
+.folder { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+.unread { min-width: 22px; text-align: center; font-size: 0.75rem; padding: 1px 6px; border-radius: 999px; background: var(--accent); color: #fff; }
+.list { list-style: none; margin: 0; padding: 0; max-height: 420px; overflow-y: auto; }
+.row { width: 100%; display: flex; gap: 10px; align-items: flex-start; text-align: left; font: inherit; color: inherit; background: transparent; border: 0; border-bottom: 1px solid var(--border); padding: 10px 14px 10px 10px; cursor: pointer; }
+.row:hover { background: var(--surface); }
+.rowSelected { background: var(--surface); box-shadow: inset 3px 0 0 var(--accent); }
+.rule { width: 4px; align-self: stretch; border-radius: 4px; flex: none; }
+.rowMain { display: grid; gap: 1px; min-width: 0; flex: 1; }
+.rowTop { display: flex; justify-content: space-between; gap: 8px; font-size: 0.8rem; color: var(--muted); }
+.sender { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.time { flex: none; font-size: 0.75rem; }
+.subject { font-size: 0.88rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rowBottom { display: flex; gap: 8px; align-items: center; justify-content: space-between; min-width: 0; }
+.snippet { font-size: 0.8rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rowUnread .subject, .rowUnread .sender { font-weight: 700; color: var(--text); }
+.rowUnread .subject { color: var(--accent); }
+
+.flag { flex: none; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 6px; border-radius: 6px; white-space: nowrap; }
+.flag_critical { color: var(--crit); background: var(--crit-bg); }
+.flag_warning { color: var(--warn); background: var(--warn-bg); }
+.flagOk { color: var(--ok); background: var(--ok-bg); }
+
+.reading { padding: 16px 20px; min-width: 0; }
+.readSubject { margin: 0 0 12px; font-size: 1.1rem; overflow-wrap: anywhere; }
+.meta { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.avatar { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-size: 0.8rem; font-weight: 700; color: #fff; background: var(--brand-gradient); }
+.headers { margin: 0; display: grid; gap: 2px; font-size: 0.82rem; flex: 1 1 220px; min-width: 0; }
+.headers div { display: flex; gap: 6px; }
+.headers dt { color: var(--muted); width: 40px; flex: none; }
+.headers dd { margin: 0; overflow-wrap: anywhere; }
+.message { padding-top: 12px; font-size: 0.9rem; }
+.message p { margin: 0; overflow-wrap: anywhere; }
+.empty { margin: 0; padding: 14px; color: var(--muted); font-size: 0.9rem; }

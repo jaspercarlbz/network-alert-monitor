@@ -4,11 +4,12 @@ import { AlertFeed } from '@/components/AlertFeed'
 import { DeviceGrid } from '@/components/DeviceGrid'
 import { FaultPanel } from '@/components/FaultPanel'
 import { Header } from '@/components/Header'
+import { OutlookInbox } from '@/components/OutlookInbox'
 import { usePoll } from '@/components/usePoll'
 import styles from './page.module.css'
 
 export default function Home() {
-  const { data, error, lastUpdated, faults, addFault, removeFault, clearFaults } = usePoll()
+  const { data, error, lastUpdated, faults, addFault, removeFault, clearFaults, mail, markRead, markAllRead } = usePoll()
   const alerts = data?.state.alerts ?? []
 
   return (
@@ -22,6 +23,7 @@ export default function Home() {
           <AlertFeed alerts={alerts} />
         </div>
       </div>
+      <OutlookInbox mail={mail} onOpen={markRead} onMarkAllRead={markAllRead} />
     </main>
   )
 }

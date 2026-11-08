@@ -46,6 +46,9 @@ Show the README diagram.
 By now the card is green again and Slack shows ✅ RESOLVED.
 > "There's the resolved message, so the on-call engineer knows they can stand down."
 
+Scroll to **Email alerts** and open the newest email.
+> "Each alert also becomes an email, shown here as an Outlook-style preview: a subject with the severity, the device and site, the reading, and a suggested next step. It's a preview only, so nothing is actually sent, but it shows how a notifier formats the same event for a different channel."
+
 **4:15 · Limits and next steps (45s)**
 > "Two things I'd do next. First, swap the simulator for a real collector (SNMP or vendor APIs) that outputs the same data shape, so the rules don't change. Second, move state into a store and run checks on a schedule instead of on dashboard polls, so it monitors even when nobody has the page open."
 
@@ -95,4 +98,4 @@ Ways to connect this project, phrased as questions or observations rather than c
 > "One codebase for the UI and the API, no servers to run, and a preview URL for every change. For a forward-deployed setting, fast iteration with a customer matters more than infrastructure."
 
 **"How did you test it?"**
-> "68 unit tests covering threshold edges, the alert lifecycle, input validation, state signing, Slack timeouts and limits, and the chart math. Then I checked each fault type end to end in the browser."
+> "77 unit tests covering threshold edges, the alert lifecycle, input validation, state signing, Slack timeouts and limits, the chart math, and the alert email format. Then I checked each fault type end to end in the browser."

@@ -1,6 +1,6 @@
 # Network Alert Monitor
 
-Automated alerting for a fleet of **simulated** routers, switches and firewalls. Every 5 seconds the app polls each device and checks three rules: **high CPU**, **interface down** and **BGP peer flap**. Alerts appear on a live dashboard and, optionally, in a **Slack** channel. During a demo you can inject faults from the dashboard and watch alerts open and resolve.
+Automated alerting for a fleet of **simulated** routers, switches and firewalls. Every 5 seconds the app polls each device and checks three rules: **high CPU**, **interface down** and **BGP peer flap**. Alerts appear on a live dashboard, in an **Outlook-style email preview** (from and to `jaspercarl.game@gmail.com`, set by `ALERT_EMAIL` in `lib/config.ts`; nothing is actually sent), and, optionally, in a **Slack** channel. During a demo you can inject faults from the dashboard and watch alerts open and resolve.
 
 The device data is simulated, so nothing here touches a real network. The app has no database and deploys to Vercel as-is.
 
@@ -44,6 +44,8 @@ Browser (dashboard)
   ├─ lib/rules       CPU / interface / BGP rules
   ├─ lib/alerts      open → dedupe → resolve
   └─ lib/notify      Slack webhook (3s timeout, never fails the poll)
+
+lib/email (in the browser): each returned event → an Outlook-style preview email
   ▼
 { devices, alerts, events, slack }
 ```
@@ -54,7 +56,7 @@ Vercel Functions are stateless, so the browser holds the monitoring state and se
 lib/           pure TypeScript logic (unit-tested)
 app/api/poll   the poll endpoint
 app/page.tsx   dashboard
-components/    Header, DeviceGrid, AlertFeed, FaultPanel, usePoll
+components/    Header, DeviceGrid, AlertFeed, FaultPanel, OutlookInbox, usePoll
 tests/         Vitest suites
 docs/          spec, plan, step-by-step guide, demo script
 ```

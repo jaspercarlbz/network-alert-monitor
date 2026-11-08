@@ -26,3 +26,6 @@ export function getConfig(env: Record<string, string | undefined> = process.env)
     demoMode,
   }
 }
+
+/** Mailbox the Outlook-style preview shows as sender and recipient. Preview only; nothing is sent. */
+export const ALERT_EMAIL = 'jaspercarl.game@gmail.com'

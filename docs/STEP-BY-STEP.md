@@ -38,7 +38,7 @@ npm install
 npm test
 ```
 
-Dapat pumasa ang lahat ng 68 test. Ang mga test ang patunay na tama ang mga alert rule, halimbawa na hindi nag-a-alert sa eksaktong 85% CPU pero nag-a-alert sa 86%.
+Dapat pumasa ang lahat ng 77 test. Ang mga test ang patunay na tama ang mga alert rule, halimbawa na hindi nag-a-alert sa eksaktong 85% CPU pero nag-a-alert sa 86%.
 
 ## 5. Patakbuhin ang app
 
@@ -47,6 +47,8 @@ npm run dev
 ```
 
 Buksan ang http://localhost:3000. Subukan ang **Inject a Fault**: pumili ng device, pindutin ang **Flap BGP**, at maghintay ng mga 15–20 segundo. Magiging pula ang card at lalabas ang alert. Pindutin ang **Clear All Faults**, at mare-resolve ang mga alert sa loob ng mga isang minuto.
+
+Sa ilalim ng page, may **Email alerts** na panel na kahawig ng Outlook. Bawat bagong alert at bawat resolve ay lalabas doon bilang email mula at papunta sa `jaspercarl.game@gmail.com`. Preview lang ito, kaya walang totoong email na ipinapadala. Para palitan ang address, baguhin ang `ALERT_EMAIL` sa `lib/config.ts`.
 
 ## 6. Ikonekta ang Slack (opsyonal)
 
